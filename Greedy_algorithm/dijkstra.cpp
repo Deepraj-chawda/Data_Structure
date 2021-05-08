@@ -3,48 +3,51 @@ using namespace std;
 #define N 10
 
 
-int minimum(int visit[],int path_weight[],int v){
+int minimum(int visit[],int distance[],int v){
     int min_vertex, min = INT16_MAX;
 
     for(int i = 1;i<=v;i++){
         
-        if( visit[i] == 0 && path_weight[i] < min){
+        if( visit[i] == 0 && distance[i] < min){
             min_vertex = i;
-            min = path_weight[i];
+            min = distance[i];
         }
     }
 
     return min_vertex;
 
 }
-void prism(int graph[][N],int v){
 
-    int MST[v+1][v+1] = {0};
+
+void dijkstra(int graph[][N],int v){
+
+  
     int visit[v+1] = {0};
-    int path_weight[v+1];
+    int distance[v+1];
     int parent[v+1] ={0};
 
     //set all values to infinite
     for(int i=1;i<=v;i++)
-        path_weight[i] = INT16_MAX;
+        distance[i] = INT16_MAX;
 
     int vertex, mst = 0;
-    cout<<"\nEnter initial vertex : ";
+    cout<<"\nEnter source vertex : ";
     cin>>vertex;
 
-    path_weight[vertex] = 0;
+    distance[vertex] = 0;
     
 
     for(int i= 1;i<=v-1;i++){
 
-        int u = minimum(visit,path_weight,v);
+        int u = minimum(visit,distance,v);
         visit[u] = 1;
 
         for(int j=1;j<=v;j++){
             
-          if(visit[j]==0 && graph[u][j] != 0 && graph[u][j]<path_weight[j]){
+          if(visit[j]==0 && graph[u][j] != 0 && distance[u] != INT16_MAX 
+                && distance[u]+graph[u][j]< distance[j]){
              
-             path_weight[j] = graph[u][j];
+             distance[j] = distance[u] + graph[u][j];
              parent[j] = u;
             
 
@@ -53,21 +56,13 @@ void prism(int graph[][N],int v){
     }
 
     for(int i=1;i<=v;i++){
-        MST[parent[i]][i] = graph[parent[i]][i];
-        mst += graph[parent[i]][i];
-    }
-
-    cout<<"\nMinimum cost of Minimum Spanning Tree : "<<mst<<endl;
-    cout<<"Minimum Spanning Tree : \n";
-    for(int i =1;i<=v;i++){
-        for(int j =1 ;j<=v;j++){
-            cout<<MST[i][j]<<"  ";
-        }
-        cout<<endl;
+      
+        cout<<"\nDistance of "<<i<<" from source : "<<distance[i];
     }
 
 
 }
+
 int main(){
 
     int graph[N][N]={0},v,edge;
@@ -89,7 +84,7 @@ int main(){
     }
 
  
-    prism(graph,v);
+  dijkstra(graph,v);
 
     return 0;
 }

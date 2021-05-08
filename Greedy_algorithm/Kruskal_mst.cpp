@@ -27,25 +27,37 @@ void sort (int graph[][3],int edge){
     }
 }
 
+int findparent(int parent[],int v){
+    if (parent[v]==v)
+        return v;
+    else
+        return findparent(parent,parent[v]);
+}
+
 void kruskal(int graph[][3],int v,int edge){
     
     int MST[v+1][v+1] = {0};
     int mst = 0;
-    int visit[v+1] = {0};
+    int parent[v+1] ;
+    
+    //initialising all parents
+    for(int i =1;i<=v;i++)
+        parent[i] = i;
+
 
     int vertex = 0;
 
     for(int i=1;i<=edge;i++){
         if (vertex == v-1)
             break;
-            
-        int e1 = graph[i][1];
-        int e2 = graph[i][2];
-        if( (visit[e1] == 0) || (visit[e2] == 0) ){
+        
+        int source = findparent(parent,graph[i][1]);
+        int destination = findparent(parent,graph[i][2]);
+        
+        if( source != destination ){
 
-            MST[e1][e2] = graph[i][0];
-            visit[e1] = 1;
-            visit[e2] = 1;
+            MST[graph[i][1]][graph[i][2]] = graph[i][0];
+            parent[source] = destination;
 
             mst += graph[i][0];
             vertex += 1;

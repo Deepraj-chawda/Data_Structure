@@ -49,7 +49,7 @@ void Merge_sort(int a[],int lb, int ub){
 }
 int main(){
     int a[N];
-    cout<<"Enter elements : "<<endl;
+    cout<<"enter "<<N<<" elements : \n";
   for(int i=0;i<N;i++)
   cin>>a[i];
 
